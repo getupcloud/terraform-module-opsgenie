@@ -1,15 +1,33 @@
-### Place your code here ###
+locals {
+  integration_name = var.cluster_name != "" ? "Prometheus - ${var.customer_name}/${var.cluster_name}" : "Prometheus - ${var.customer_name}"
+}
 
-resource "shell_script" "example" {
-  lifecycle_commands {
-    create = "echo '{\"cluster_name\":\"$CLUSTER_NAME\"}'"
-    update = "echo '{\"example\":\"$CLUSTER_NAME\"}'"
-    read   = "echo '{\"example\":\"$CLUSTER_NAME\"}'"
-    delete = "echo '{}'"
+data "opsgenie_team" "owner" {
+  name = var.owner_team_name
+}
+
+data "opsgenie_team" "responder" {
+  name = var.responder_team_name != "" ? var.responder_team_name : var.owner_team_name
+}
+
+resource "opsgenie_api_integration" "prometheus" {
+  name                           = local.integration_name
+  type                           = var.type
+  ignore_responders_from_payload = true
+  owner_team_id                  = data.opsgenie_team.owner.id
+
+  responders {
+    type = "team"
+    id   = data.opsgenie_team.responder.id
   }
 
-  environment = {
-    KUBECONFIG   = local.kubeconfig
-    CLUSTER_NAME = var.cluster_name
+  dynamic "responders" {
+    for_each = var.responders
+
+    content {
+      type = responders.value.type
+      id   = responders.value.id
+    }
   }
+
 }
