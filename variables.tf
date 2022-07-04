@@ -1,3 +1,9 @@
+variable "opsgenie_enabled" {
+  description = "Creates and enables Opsgenie integration."
+  type        = bool
+  default     = true
+}
+
 variable "customer_name" {
   description = "Customer name"
   type        = string
@@ -9,11 +15,11 @@ variable "cluster_name" {
   default     = ""
 }
 
-#variable "api_key" {
-#  description = "The API Key for the Opsgenie Integration. If omitted, the OPSGENIE_API_KEY environment variable is used."
-#  type        = string
-#  default     = ""
-#}
+variable "api_key" {
+  description = "The API Key for the Opsgenie Integration. If omitted, the OPSGENIE_API_KEY environment variable is used."
+  type        = string
+  default     = ""
+}
 
 variable "type" {
   description = "Type of the integration (API, Prometheus, etc)"
