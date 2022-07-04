@@ -1,20 +1,20 @@
 locals {
-  enabled          = (var.opsgenie_enabled && var.api_key != "")
+  enabled          = var.opsgenie_enabled
   integration_name = var.cluster_name != "" ? "Prometheus - ${var.customer_name}/${var.cluster_name}" : "Prometheus - ${var.customer_name}"
 }
 
 data "opsgenie_team" "owner" {
-  count = local.enabled ? 1 : 0
+  count = var.opsgenie_enabled ? 1 : 0
   name  = var.owner_team_name
 }
 
 data "opsgenie_team" "responder" {
-  count = local.enabled ? 1 : 0
+  count = var.opsgenie_enabled ? 1 : 0
   name  = var.responder_team_name != "" ? var.responder_team_name : var.owner_team_name
 }
 
 resource "opsgenie_api_integration" "prometheus" {
-  count                          = local.enabled ? 1 : 0
+  count                          = var.opsgenie_enabled ? 1 : 0
   name                           = local.integration_name
   type                           = var.type
   ignore_responders_from_payload = true
