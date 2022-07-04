@@ -9,14 +9,14 @@ variable "cluster_name" {
   default     = ""
 }
 
-variable "api_key" {
-  description = "The API Key for the Opsgenie Integration. If omitted, the OPSGENIE_API_KEY environment variable is used."
-  type        = string
-  default     = ""
-}
+#variable "api_key" {
+#  description = "The API Key for the Opsgenie Integration. If omitted, the OPSGENIE_API_KEY environment variable is used."
+#  type        = string
+#  default     = ""
+#}
 
 variable "type" {
-  description = "Optional) Type of the integration (API, Marid, Prometheus, etc)"
+  description = "Type of the integration (API, Prometheus, etc)"
   type        = string
   default     = "Prometheus"
 }
